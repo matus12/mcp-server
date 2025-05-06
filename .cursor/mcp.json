@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "kontent-ai-stdio": {
+      "command": "node ./build/stdioTransport.js",
+      "env": {
+        "KONTENT_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNTI0OTZjN2EzOTM0YTQwYjc2Y2I5NjlhOTVmZmQ3NCIsImlhdCI6MTc0MzQxNDkwMCwibmJmIjoxNzQzNDE0OTAwLCJleHAiOjE3NTkyMjYwNDAsInZlciI6IjMuMC4wIiwidWlkIjoiWTBHTU1PTDZ3M2ozT29jakhWRzh4aDFQV0NOSzZCd3JhM3JKOEh1X1BBNCIsInByb2plY3RfY29udGFpbmVyX2lkIjoiMmFmZjllN2UyZDQwMDA4ZmNiMmM0ZWMwNDllN2Y3ODIiLCJhdWQiOiJtYW5hZ2Uua2VudGljb2Nsb3VkLmNvbSJ9.RMwuma1PfcenhPnx_YX5KS-cT1DPqwbSSHHmNnzybqI",
+        "KONTENT_ENVIRONMENT_ID": "816337cd-f7c2-000c-f1f3-1df528409ac6"
+      }
+    },
+    "kontent-ai-sse": {
+      "url": "http://localhost:3001/sse"
+    },
+    "kontent-ai-sse-azure": {
+      "url": "https://mcpsse-b3cadfhugsg6guab.westeurope-01.azurewebsites.net/sse"
+    }
+  }
+}
