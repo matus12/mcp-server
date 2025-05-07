@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { createManagementClient } from '@kontent-ai/management-sdk';
+import { createMapiClient } from '../clients/kontentClients.js';
 
 export const registerTool = (server: McpServer): void => {
   server.tool(
@@ -7,10 +7,7 @@ export const registerTool = (server: McpServer): void => {
     "Get all assets from Management API",
     {},
     async () => {
-      const client = createManagementClient({
-        apiKey: process.env.KONTENT_API_KEY ?? "",
-        environmentId: process.env.KONTENT_ENVIRONMENT_ID ?? "",
-      });
+      const client = createMapiClient();
 
       const response = await client
         .listAssets()

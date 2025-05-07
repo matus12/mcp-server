@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { createManagementClient } from '@kontent-ai/management-sdk';
+import { createMapiClient } from '../clients/kontentClients.js';
 
 export const registerTool = (server: McpServer): void => {
   server.tool(
@@ -11,10 +11,7 @@ export const registerTool = (server: McpServer): void => {
       languageCodename: z.string().describe("Codename of the language variant to get")
     },
     async ({ itemCodename, languageCodename }) => {
-      const client = createManagementClient({
-        apiKey: process.env.KONTENT_API_KEY ?? "",
-        environmentId: process.env.KONTENT_ENVIRONMENT_ID ?? "",
-      });
+      const client = createMapiClient();
 
       const response = await client
         .viewLanguageVariant()
@@ -25,10 +22,10 @@ export const registerTool = (server: McpServer): void => {
       return {
         content: [
           {
-            type: "text", 
-            text: JSON.stringify(response.data)
-          }
-        ]
+            type: "text",
+            text: JSON.stringify(response.data),
+          },
+        ],
       };
     }
   );
