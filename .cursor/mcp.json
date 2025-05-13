@@ -1,7 +1,11 @@
 {
   "mcpServers": {
     "kontent-ai-stdio": {
-      "command": "node ./build/stdioTransport.js"
+      "command": "node ./build/stdioTransport.js",
+      "env": {
+        "KONTENT_API_KEY": "",
+        "KONTENT_ENVIRONMENT_ID": ""
+      }
     },
     "kontent-ai-sse": {
       "url": "http://localhost:3001/sse"

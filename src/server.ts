@@ -7,6 +7,7 @@ import { registerTool as registerListContentTypesMapi } from "./tools/list-conte
 import { registerTool as registerListLanguagesMapi } from "./tools/list-languages-mapi.js";
 import { registerTool as registerGetAssetMapi } from "./tools/get-asset-mapi.js";
 import { registerTool as registerListAssetsMapi } from "./tools/list-assets-mapi.js";
+import { registerTool as registerAddContentTypeMapi } from "./tools/add-content-type-mapi.js";
 
 // Create server instance
 export const createServer = () => {
@@ -28,6 +29,7 @@ export const createServer = () => {
   registerListLanguagesMapi(server);
   registerGetAssetMapi(server);
   registerListAssetsMapi(server);
+  registerAddContentTypeMapi(server);
 
   return { server };
 };

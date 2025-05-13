@@ -1,11 +1,7 @@
 {
   "name": "@kontent-ai/mcp-server",
   "version": "1.0.0",
-  "main": "index.js",
   "type": "module",
-  "bin": {
-    "weather": "./build/index.js"
-  },
   "scripts": {
     "build": "tsc",
     "start:stdio": "node build/stdioTransport.js",
