@@ -1,19 +1,22 @@
 {
   "name": "@kontent-ai/mcp-server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "build": "tsc",
     "start:stdio": "node build/stdioTransport.js",
     "start:sse": "node build/sseTransport.js"
   },
+  "bin": {
+    "stdio": "./build/stdioTransport.js",
+    "sse": "./build/sseTransport.js"
+  },
   "files": [
     "build"
   ],
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Jiri Lojda",
+  "license": "MIT",
   "dependencies": {
     "@kontent-ai/delivery-sdk": "^16.1.0",
     "@kontent-ai/management-sdk": "^7.9.0",
