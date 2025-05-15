@@ -18,12 +18,11 @@ This server provides a Model Context Protocol (MCP) interface for interacting wi
 
 ### Environment Variables
 
-Create a `.env` file with the following variables:
+The following environment variables are needed:
 
 ```
 KONTENT_ENVIRONMENT_ID=your_environment_id
 KONTENT_API_KEY=your_api_key
-PORT=3001  # Optional, defaults to 3001
 ```
 
 ### Using with npx
@@ -36,6 +35,20 @@ npx @kontent-ai/mcp-server sse
 
 # Run with STDIO transport
 npx @kontent-ai/mcp-server stdio
+```
+
+### Example mcp.json usage
+
+```json
+{
+  "kontent-ai-stdio": {
+      "command": "npx @kontent-ai/mcp stdio",
+      "env": {
+        "KONTENT_API_KEY": "<management-api-key>",
+        "KONTENT_ENVIRONMENT_ID": "<environment-id>"
+      }
+    },
+}
 ```
 
 ### Local Installation
