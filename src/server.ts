@@ -8,6 +8,7 @@ import { registerTool as registerListLanguagesMapi } from "./tools/list-language
 import { registerTool as registerGetAssetMapi } from "./tools/get-asset-mapi.js";
 import { registerTool as registerListAssetsMapi } from "./tools/list-assets-mapi.js";
 import { registerTool as registerAddContentTypeMapi } from "./tools/add-content-type-mapi.js";
+import { registerTool as registerAddContentTypeSnippetMapi } from "./tools/add-content-type-snippet-mapi.js";
 
 // Create server instance
 export const createServer = () => {
@@ -30,6 +31,7 @@ export const createServer = () => {
   registerGetAssetMapi(server);
   registerListAssetsMapi(server);
   registerAddContentTypeMapi(server);
+  registerAddContentTypeSnippetMapi(server);
 
   return { server };
 };

@@ -8,7 +8,6 @@ const { server } = createServer();
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.log("Kontent.ai MCP Server (STDIO) running");
 }
 
 main().catch((error) => {
