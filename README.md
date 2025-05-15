@@ -84,8 +84,7 @@ npm run start:stdio  # For STDIO transport
   - `clients/` - Kontent.ai API client setup
   - `schemas/` - Data validation schemas
   - `server.ts` - Main server setup and tool registration
-  - `sseTransport.ts` - SSE transport implementation
-  - `stdioTransport.ts` - STDIO transport implementation
+  - `bin.ts` - Single entry point that handles both transport types
 
 ## License
 

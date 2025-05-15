@@ -4,12 +4,11 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start:stdio": "node build/stdioTransport.js",
-    "start:sse": "node build/sseTransport.js"
+    "start:stdio": "node build/bin.js stdio",
+    "start:sse": "node build/bin.js sse"
   },
   "bin": {
-    "stdio": "./build/stdioTransport.js",
-    "sse": "./build/sseTransport.js"
+    "@kontent-ai/mcp-server": "./build/bin.js"
   },
   "files": [
     "build"
