@@ -11,7 +11,9 @@ import { registerTool as registerAddContentTypeMapi } from "./tools/add-content-
 import { registerTool as registerAddContentTypeSnippetMapi } from "./tools/add-content-type-snippet-mapi.js";
 import { registerTool as registerGetTypeSnippetMapi } from "./tools/get-type-snippet-mapi.js";
 import { registerTool as registerListContentTypeSnippetsMapi } from "./tools/list-content-type-snippets-mapi.js";
-
+import { registerTool as registerAddTaxonomyGroupMapi } from "./tools/add-taxonomy-group-mapi.js";
+import { registerTool as registerListTaxonomyGroupsMapi } from "./tools/list-taxonomy-groups-mapi.js";
+import { registerTool as registerGetTaxonomyGroupMapi } from "./tools/get-taxonomy-group-mapi.js";
 // Create server instance
 export const createServer = () => {
   const server = new McpServer({
@@ -36,6 +38,9 @@ export const createServer = () => {
   registerAddContentTypeSnippetMapi(server);
   registerGetTypeSnippetMapi(server);
   registerListContentTypeSnippetsMapi(server);
+  registerAddTaxonomyGroupMapi(server);
+  registerListTaxonomyGroupsMapi(server);
+  registerGetTaxonomyGroupMapi(server);
 
   return { server };
 };
