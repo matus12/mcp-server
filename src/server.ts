@@ -9,6 +9,8 @@ import { registerTool as registerGetAssetMapi } from "./tools/get-asset-mapi.js"
 import { registerTool as registerListAssetsMapi } from "./tools/list-assets-mapi.js";
 import { registerTool as registerAddContentTypeMapi } from "./tools/add-content-type-mapi.js";
 import { registerTool as registerAddContentTypeSnippetMapi } from "./tools/add-content-type-snippet-mapi.js";
+import { registerTool as registerGetTypeSnippetMapi } from "./tools/get-type-snippet-mapi.js";
+import { registerTool as registerListContentTypeSnippetsMapi } from "./tools/list-content-type-snippets-mapi.js";
 
 // Create server instance
 export const createServer = () => {
@@ -32,6 +34,8 @@ export const createServer = () => {
   registerListAssetsMapi(server);
   registerAddContentTypeMapi(server);
   registerAddContentTypeSnippetMapi(server);
+  registerGetTypeSnippetMapi(server);
+  registerListContentTypeSnippetsMapi(server);
 
   return { server };
 };
