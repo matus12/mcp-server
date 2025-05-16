@@ -5,9 +5,9 @@ This server provides a Model Context Protocol (MCP) interface for interacting wi
 ## Features
 
 - Retrieve content items, variants, and assets
-- Get content types and their structure
 - List available languages and assets
-- Create new content types and snippets
+- Get, List, and Create content types and snippets
+- Get, List, and Create taxonomies
 
 ## Getting Started
 
@@ -42,7 +42,7 @@ npx @kontent-ai/mcp-server stdio
 ```json
 {
   "kontent-ai-stdio": {
-      "command": "npx @kontent-ai/mcp stdio",
+      "command": "npx @kontent-ai/mcp-server@latest stdio",
       "env": {
         "KONTENT_API_KEY": "<management-api-key>",
         "KONTENT_ENVIRONMENT_ID": "<environment-id>"
