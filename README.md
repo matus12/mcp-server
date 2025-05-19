@@ -16,29 +16,14 @@ This server provides a Model Context Protocol (MCP) interface for interacting wi
 - Node.js (version specified in `.nvmrc`)
 - Kontent.ai account with API keys
 
-### Environment Variables
+### Running
 
-The following environment variables are needed:
+You can run this server with either stdio or sse transport.
 
-```
-KONTENT_ENVIRONMENT_ID=your_environment_id
-KONTENT_API_KEY=your_api_key
-```
+### Stdio transport
 
-### Using with npx
-
-You can run the server directly with npx:
-
-```bash
-# Run with SSE transport
-npx @kontent-ai/mcp-server sse
-
-# Run with STDIO transport
-npx @kontent-ai/mcp-server stdio
-```
-
-### Example mcp.json usage
-
+To run the server with stdio transport configure your MCP client with the command to run and the necessary environment variables.
+Example:
 ```json
 {
   "kontent-ai-stdio": {
@@ -47,9 +32,36 @@ npx @kontent-ai/mcp-server stdio
         "KONTENT_API_KEY": "<management-api-key>",
         "KONTENT_ENVIRONMENT_ID": "<environment-id>"
       }
-    },
+    }
 }
 ```
+
+### SSE transport
+
+You can also run your server manually with the SSE transport and configure your MCP client to connect to the port the server is running on.
+Run the following command to start the server and ensure the environment variables are defined for it either by providing `.env` file in the `cwd` or providing the variables to the process any other way.
+
+```bash
+npx @kontent-ai/mcp-server@latest sse
+```
+```env
+KONTENT_API_KEY=<management-api-key>
+KONTENT_ENVIRONMENT_ID=<environment-id>
+PORT=<port-number> # optionally specify port, defaults to 3001
+```
+
+Then configure your MCP client to connect to the running server.
+Example:
+```json
+{
+  "kontent-ai-sse": {
+    "url": "http://localhost:3001/sse"
+  }
+}
+```
+
+
+## Development
 
 ### Local Installation
 
@@ -68,8 +80,6 @@ npm run build
 npm run start:sse  # For SSE transport
 npm run start:stdio  # For STDIO transport
 ```
-
-## Development
 
 ### Available Scripts
 
