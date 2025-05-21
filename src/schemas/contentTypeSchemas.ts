@@ -209,7 +209,7 @@ const urlSlugElementSchema = z.object({
 });
 
 // Define a union type of all possible element types for content types
-export const elementSchema = z.union([
+export const elementSchema = z.discriminatedUnion('type', [
   assetElementSchema,
   customElementSchema,
   dateTimeElementSchema,
@@ -233,7 +233,7 @@ export const contentGroupSchema = z.object({
 });
 
 // Define a union type for snippet elements (excluding url_slug and snippet elements)
-export const snippetElementSchema = z.union([
+export const snippetElementSchema = z.discriminatedUnion('type', [
   assetElementSchema,
   customElementSchema,
   dateTimeElementSchema,
