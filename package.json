@@ -17,16 +17,16 @@
   "author": "Jiri Lojda",
   "license": "MIT",
   "dependencies": {
-    "@kontent-ai/delivery-sdk": "^16.1.0",
+    "@kontent-ai/delivery-sdk": "^16.2.0",
     "@kontent-ai/management-sdk": "^7.9.0",
-    "@modelcontextprotocol/sdk": "^1.9.0",
+    "@modelcontextprotocol/sdk": "^1.11.4",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "zod": "^3.24.2"
+    "zod": "^3.25.7"
   },
   "devDependencies": {
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.14.1",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.19",
     "typescript": "^5.8.3"
   }
 }
