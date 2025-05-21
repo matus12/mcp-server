@@ -1,5 +1,13 @@
 # Kontent.ai MCP Server
 
+[![NPM Version][npm-shield]][npm-url]
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![Discord][discord-shield]][discord-url]
+
 This server provides a Model Context Protocol (MCP) interface for interacting with Kontent.ai's Management and Delivery APIs. It enables AI assistants to access and manipulate Kontent.ai content using standardized tools.
 
 ## Features
@@ -99,3 +107,18 @@ npm run start:stdio  # For STDIO transport
 ## License
 
 MIT 
+
+[contributors-shield]: https://img.shields.io/github/contributors/kontent-ai/mcp-server.svg?style=for-the-badge
+[contributors-url]: https://github.com/kontent-ai/mcp-server/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/kontent-ai/mcp-server.svg?style=for-the-badge
+[forks-url]: https://github.com/kontent-ai/mcp-server/network/members
+[stars-shield]: https://img.shields.io/github/stars/kontent-ai/mcp-server.svg?style=for-the-badge
+[stars-url]: https://github.com/kontent-ai/mcp-server/stargazers
+[issues-shield]: https://img.shields.io/github/issues/kontent-ai/mcp-server.svg?style=for-the-badge
+[issues-url]: https://github.com/kontent-ai/mcp-server/issues
+[license-shield]: https://img.shields.io/github/license/kontent-ai/mcp-server.svg?style=for-the-badge
+[license-url]: https://github.com/kontent-ai/mcp-server/blob/master/LICENSE.md
+[discord-shield]: https://img.shields.io/discord/821885171984891914?color=%237289DA&label=Kontent.ai%20Discord&logo=discord&style=for-the-badge
+[discord-url]: https://discord.com/invite/SKCxwPtevJ
+[npm-url]: https://www.npmjs.com/package/@kontent-ai/mcp-server
+[npm-shield]: https://img.shields.io/npm/v/%40kontent-ai%2Fmcp-server?style=for-the-badge&logo=npm&color=%23CB0000
