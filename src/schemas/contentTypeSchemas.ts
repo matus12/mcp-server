@@ -10,7 +10,9 @@ const referenceObjectSchema = z.object({
 const baseElementSchema = {
   codename: z.string().optional(),
   external_id: z.string().optional(),
-  content_group: referenceObjectSchema.optional(),
+  content_group: referenceObjectSchema
+    .describe("An object with an id or codename property referencing a content group.")
+    .optional(),
 };
 
 const namedElementSchema = {
@@ -73,132 +75,154 @@ const textLengthLimitSchema = z.object({
   applies_to: z.enum(['words', 'characters'])
 }).optional();
 
+// Individual element type schemas
+const assetElementSchema = z.object({
+  type: z.literal('asset'),
+  ...namedElementSchema,
+  asset_count_limit: countLimitSchema,
+  maximum_file_size: z.number().optional(),
+  allowed_file_types: z.enum(['adjustable', 'any']).optional(),
+  ...imageLimitSchema,
+  default: arrayDefaultSchema(),
+});
+
+const customElementSchema = z.object({
+  type: z.literal('custom'),
+  ...namedElementSchema,
+  source_url: z.string(),
+  json_parameters: z.string().optional(),
+  allowed_elements: z.array(
+    referenceObjectSchema
+      .describe("An object with an id or codename property referencing an element.")
+  ).optional(),
+});
+
+const dateTimeElementSchema = z.object({
+  type: z.literal('date_time'),
+  ...namedElementSchema,
+  default: stringDefaultSchema,
+});
+
+const guidelinesElementSchema = z.object({
+  type: z.literal('guidelines'),
+  guidelines: z.string(),
+  ...baseElementSchema,
+});
+
+const modularContentElementSchema = z.object({
+  type: z.literal('modular_content'),
+  ...namedElementSchema,
+  allowed_content_types: z.array(
+    referenceObjectSchema
+      .describe("An object with an id or codename property referencing a content type.")
+  ).optional(),
+  item_count_limit: countLimitSchema,
+  default: arrayDefaultSchema(),
+});
+
+const subpagesElementSchema = z.object({
+  type: z.literal('subpages'),
+  ...namedElementSchema,
+  allowed_content_types: z.array(
+    referenceObjectSchema
+      .describe("An object with an id or codename property referencing a content type.")
+  ).optional(),
+  item_count_limit: countLimitSchema,
+});
+
+const multipleChoiceElementSchema = z.object({
+  type: z.literal('multiple_choice'),
+  ...namedElementSchema,
+  mode: z.enum(['single', 'multiple']),
+  options: z.array(z.object({
+    name: z.string(),
+    codename: z.string().optional(),
+    external_id: z.string().optional(),
+  })),
+  default: arrayDefaultSchema(),
+});
+
+const numberElementSchema = z.object({
+  type: z.literal('number'),
+  ...namedElementSchema,
+  default: numberDefaultSchema,
+});
+
+const richTextElementSchema = z.object({
+  type: z.literal('rich_text'),
+  ...namedElementSchema,
+  allowed_blocks: z.array(z.enum(['images', 'text', 'tables', 'components-and-items'])).optional(),
+  allowed_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
+  allowed_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
+  allowed_table_blocks: z.array(z.enum(['images', 'text'])).optional(),
+  allowed_table_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
+  allowed_table_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
+  allowed_content_types: z.array(
+    referenceObjectSchema
+      .describe("An object with an id or codename property referencing a content type.")
+  ).optional(),
+  allowed_item_link_types: z.array(
+    referenceObjectSchema
+      .describe("An object with an id or codename property referencing a content type.")
+  ).optional(),
+  ...imageLimitSchema,
+  allowed_image_types: z.enum(['adjustable', 'any']).optional(),
+  maximum_image_size: z.number().optional(),
+  maximum_text_length: textLengthLimitSchema,
+});
+
+const snippetElement = z.object({
+  type: z.literal('snippet'),
+  snippet: referenceObjectSchema
+    .describe("An object with an id or codename property referencing a snippet."),
+  ...baseElementSchema,
+});
+
+const taxonomyElementSchema = z.object({
+  type: z.literal('taxonomy'),
+  taxonomy_group: referenceObjectSchema
+    .describe("An object with an id or codename property referencing a taxonomy group."),
+  ...namedElementSchema,
+  term_count_limit: countLimitSchema,
+  default: arrayDefaultSchema(),
+});
+
+const textElementSchema = z.object({
+  type: z.literal('text'),
+  ...namedElementSchema,
+  maximum_text_length: textLengthLimitSchema,
+  validation_regex: regexValidationSchema,
+  default: stringDefaultSchema,
+});
+
+const urlSlugElementSchema = z.object({
+  type: z.literal('url_slug'),
+  ...namedElementSchema,
+  depends_on: z.object({
+    element: referenceObjectSchema
+      .describe("An object with an id or codename property referencing an element."),
+    snippet: referenceObjectSchema
+      .describe("An object with an id or codename property referencing a content type snippet.")
+      .optional(),
+  }),
+  validation_regex: regexValidationSchema,
+});
+
 // Define a union type of all possible element types for content types
 export const elementSchema = z.union([
-  // Asset element
-  z.object({
-    type: z.literal('asset'),
-    ...namedElementSchema,
-    asset_count_limit: countLimitSchema,
-    maximum_file_size: z.number().optional(),
-    allowed_file_types: z.enum(['adjustable', 'any']).optional(),
-    ...imageLimitSchema,
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Custom element
-  z.object({
-    type: z.literal('custom'),
-    ...namedElementSchema,
-    source_url: z.string(),
-    json_parameters: z.string().optional(),
-    allowed_elements: z.array(referenceObjectSchema).optional(),
-  }),
-  
-  // Date time element
-  z.object({
-    type: z.literal('date_time'),
-    ...namedElementSchema,
-    default: stringDefaultSchema,
-  }),
-  
-  // Guidelines element
-  z.object({
-    type: z.literal('guidelines'),
-    guidelines: z.string(),
-    ...baseElementSchema,
-  }),
-  
-  // Linked items (modular content) element
-  z.object({
-    type: z.literal('modular_content'),
-    ...namedElementSchema,
-    allowed_content_types: z.array(referenceObjectSchema).optional(),
-    item_count_limit: countLimitSchema,
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Subpages element
-  z.object({
-    type: z.literal('subpages'),
-    ...namedElementSchema,
-    allowed_content_types: z.array(referenceObjectSchema).optional(),
-    item_count_limit: countLimitSchema,
-  }),
-  
-  // Multiple choice element
-  z.object({
-    type: z.literal('multiple_choice'),
-    ...namedElementSchema,
-    mode: z.enum(['single', 'multiple']),
-    options: z.array(z.object({
-      name: z.string(),
-      codename: z.string().optional(),
-      external_id: z.string().optional(),
-    })),
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Number element
-  z.object({
-    type: z.literal('number'),
-    ...namedElementSchema,
-    default: numberDefaultSchema,
-  }),
-  
-  // Rich text element
-  z.object({
-    type: z.literal('rich_text'),
-    ...namedElementSchema,
-    allowed_blocks: z.array(z.enum(['images', 'text', 'tables', 'components-and-items'])).optional(),
-    allowed_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
-    allowed_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
-    allowed_table_blocks: z.array(z.enum(['images', 'text'])).optional(),
-    allowed_table_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
-    allowed_table_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
-    allowed_content_types: z.array(referenceObjectSchema).optional(),
-    allowed_item_link_types: z.array(referenceObjectSchema).optional(),
-    ...imageLimitSchema,
-    allowed_image_types: z.enum(['adjustable', 'any']).optional(),
-    maximum_image_size: z.number().optional(),
-    maximum_text_length: textLengthLimitSchema,
-  }),
-  
-  // Snippet element
-  z.object({
-    type: z.literal('snippet'),
-    snippet: referenceObjectSchema,
-    ...baseElementSchema,
-  }),
-  
-  // Taxonomy element
-  z.object({
-    type: z.literal('taxonomy'),
-    taxonomy_group: referenceObjectSchema,
-    ...namedElementSchema,
-    term_count_limit: countLimitSchema,
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Text element
-  z.object({
-    type: z.literal('text'),
-    ...namedElementSchema,
-    maximum_text_length: textLengthLimitSchema,
-    validation_regex: regexValidationSchema,
-    default: stringDefaultSchema,
-  }),
-  
-  // URL slug element
-  z.object({
-    type: z.literal('url_slug'),
-    ...namedElementSchema,
-    depends_on: z.object({
-      element: referenceObjectSchema,
-      snippet: referenceObjectSchema.optional(),
-    }),
-    validation_regex: regexValidationSchema,
-  }),
+  assetElementSchema,
+  customElementSchema,
+  dateTimeElementSchema,
+  guidelinesElementSchema,
+  modularContentElementSchema,
+  subpagesElementSchema,
+  multipleChoiceElementSchema,
+  numberElementSchema,
+  richTextElementSchema,
+  snippetElement,
+  taxonomyElementSchema,
+  textElementSchema,
+  urlSlugElementSchema,
 ]);
 
 // Define schema for content groups
@@ -210,110 +234,15 @@ export const contentGroupSchema = z.object({
 
 // Define a union type for snippet elements (excluding url_slug and snippet elements)
 export const snippetElementSchema = z.union([
-  // Asset element
-  z.object({
-    type: z.literal('asset'),
-    ...namedElementSchema,
-    asset_count_limit: countLimitSchema,
-    maximum_file_size: z.number().optional(),
-    allowed_file_types: z.enum(['adjustable', 'any']).optional(),
-    ...imageLimitSchema,
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Custom element
-  z.object({
-    type: z.literal('custom'),
-    ...namedElementSchema,
-    source_url: z.string(),
-    json_parameters: z.string().optional(),
-    allowed_elements: z.array(referenceObjectSchema).optional(),
-  }),
-  
-  // Date time element
-  z.object({
-    type: z.literal('date_time'),
-    ...namedElementSchema,
-    default: stringDefaultSchema,
-  }),
-  
-  // Guidelines element
-  z.object({
-    type: z.literal('guidelines'),
-    guidelines: z.string(),
-    ...baseElementSchema,
-  }),
-  
-  // Linked items (modular content) element
-  z.object({
-    type: z.literal('modular_content'),
-    ...namedElementSchema,
-    allowed_content_types: z.array(referenceObjectSchema).optional(),
-    item_count_limit: countLimitSchema,
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Subpages element
-  z.object({
-    type: z.literal('subpages'),
-    ...namedElementSchema,
-    allowed_content_types: z.array(referenceObjectSchema).optional(),
-    item_count_limit: countLimitSchema,
-  }),
-  
-  // Multiple choice element
-  z.object({
-    type: z.literal('multiple_choice'),
-    ...namedElementSchema,
-    mode: z.enum(['single', 'multiple']),
-    options: z.array(z.object({
-      name: z.string(),
-      codename: z.string().optional(),
-      external_id: z.string().optional(),
-    })),
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Number element
-  z.object({
-    type: z.literal('number'),
-    ...namedElementSchema,
-    default: numberDefaultSchema,
-  }),
-  
-  // Rich text element
-  z.object({
-    type: z.literal('rich_text'),
-    ...namedElementSchema,
-    allowed_blocks: z.array(z.enum(['images', 'text', 'tables', 'components-and-items'])).optional(),
-    allowed_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
-    allowed_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
-    allowed_table_blocks: z.array(z.enum(['images', 'text'])).optional(),
-    allowed_table_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
-    allowed_table_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
-    allowed_content_types: z.array(referenceObjectSchema).optional(),
-    allowed_item_link_types: z.array(referenceObjectSchema).optional(),
-    ...imageLimitSchema,
-    allowed_image_types: z.enum(['adjustable', 'any']).optional(),
-    maximum_image_size: z.number().optional(),
-    maximum_text_length: textLengthLimitSchema,
-  }),
-  
-  // Taxonomy element
-  z.object({
-    type: z.literal('taxonomy'),
-    taxonomy_group: referenceObjectSchema,
-    ...namedElementSchema,
-    term_count_limit: countLimitSchema,
-    default: arrayDefaultSchema(),
-  }),
-  
-  // Text element
-  z.object({
-    type: z.literal('text'),
-    ...namedElementSchema,
-    maximum_text_length: textLengthLimitSchema,
-    validation_regex: regexValidationSchema,
-    default: stringDefaultSchema,
-  }),
+  assetElementSchema,
+  customElementSchema,
+  dateTimeElementSchema,
+  guidelinesElementSchema,
+  modularContentElementSchema,
+  subpagesElementSchema,
+  multipleChoiceElementSchema,
+  numberElementSchema,
+  richTextElementSchema,
+  taxonomyElementSchema,
+  textElementSchema,
 ]); 
