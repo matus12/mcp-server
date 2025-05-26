@@ -1,5 +1,6 @@
-import { createManagementClient } from '@kontent-ai/management-sdk';
-import packageJson from "../../package.json" with { type: "json" };
+import {createManagementClient} from '@kontent-ai/management-sdk';
+import packageJson from "../../package.json" with {type: "json"};
+import {throwError} from "../utils/throwError.js";
 
 const sourceTrackingHeaderName = "X-KC-SOURCE";
 
@@ -23,6 +24,3 @@ export const createMapiClient = (
   });
 };
 
-const throwError = (message: string) => {
-  throw new Error(message);
-};
