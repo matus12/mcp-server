@@ -4,7 +4,7 @@ import { z } from "zod";
 const referenceObjectSchema = z.object({
   id: z.string().optional(),
   codename: z.string().optional(),
-});
+}).describe("An object with an id or codename property referencing another item. Using codename is preferred for better readability.");
 
 // Common property schemas
 const baseElementSchema = {
@@ -18,7 +18,7 @@ const baseElementSchema = {
 const namedElementSchema = {
   ...baseElementSchema,
   name: z.string(),
-  guidelines: z.string().optional(),
+  guidelines: z.string().optional().describe("Guidelines for the element. This is rich text and can include HTML formatting. No need to wrap in <p> tags."),
   is_required: z.boolean().optional(),
   is_non_localizable: z.boolean().optional(),
 };
@@ -43,9 +43,9 @@ const imageLimitSchema = {
 };
 
 // Default value schemas
-const arrayDefaultSchema = (schema = referenceObjectSchema) => z.object({
+const arrayDefaultSchema = z.object({
   global: z.object({
-    value: z.array(schema)
+    value: z.array(referenceObjectSchema)
   })
 }).optional();
 
@@ -83,7 +83,7 @@ const assetElementSchema = z.object({
   maximum_file_size: z.number().optional(),
   allowed_file_types: z.enum(['adjustable', 'any']).optional(),
   ...imageLimitSchema,
-  default: arrayDefaultSchema(),
+  default: arrayDefaultSchema,
 });
 
 const customElementSchema = z.object({
@@ -94,7 +94,7 @@ const customElementSchema = z.object({
   allowed_elements: z.array(
     referenceObjectSchema
       .describe("An object with an id or codename property referencing an element.")
-  ).optional(),
+  ).optional().describe("Specifies which elements from the content type can be used within this custom element."),
 });
 
 const dateTimeElementSchema = z.object({
@@ -114,10 +114,10 @@ const modularContentElementSchema = z.object({
   ...namedElementSchema,
   allowed_content_types: z.array(
     referenceObjectSchema
-      .describe("An object with an id or codename property referencing a content type.")
+      .describe("An object with an id or codename property referencing a content type. Use an empty array to allow all content types.")
   ).optional(),
   item_count_limit: countLimitSchema,
-  default: arrayDefaultSchema(),
+  default: arrayDefaultSchema,
 });
 
 const subpagesElementSchema = z.object({
@@ -125,7 +125,7 @@ const subpagesElementSchema = z.object({
   ...namedElementSchema,
   allowed_content_types: z.array(
     referenceObjectSchema
-      .describe("An object with an id or codename property referencing a content type.")
+      .describe("An object with an id or codename property referencing a content type. Use an empty array to allow all content types.")
   ).optional(),
   item_count_limit: countLimitSchema,
 });
@@ -139,7 +139,7 @@ const multipleChoiceElementSchema = z.object({
     codename: z.string().optional(),
     external_id: z.string().optional(),
   })),
-  default: arrayDefaultSchema(),
+  default: arrayDefaultSchema,
 });
 
 const numberElementSchema = z.object({
@@ -151,20 +151,26 @@ const numberElementSchema = z.object({
 const richTextElementSchema = z.object({
   type: z.literal('rich_text'),
   ...namedElementSchema,
-  allowed_blocks: z.array(z.enum(['images', 'text', 'tables', 'components-and-items'])).optional(),
-  allowed_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
-  allowed_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
-  allowed_table_blocks: z.array(z.enum(['images', 'text'])).optional(),
-  allowed_table_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional(),
-  allowed_table_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional(),
+  allowed_blocks: z.array(z.enum(['images', 'text', 'tables', 'components-and-items'])).optional()
+    .describe("Specifies allowed blocks. Use an empty array to allow all options."),
+  allowed_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional()
+    .describe("Specifies allowed formatting options. Use an empty array to allow all options."),
+  allowed_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional()
+    .describe("Specifies allowed text blocks. Use an empty array to allow all options."),
+  allowed_table_blocks: z.array(z.enum(['images', 'text'])).optional()
+    .describe("Specifies allowed table blocks. Use an empty array to allow all options."),
+  allowed_table_formatting: z.array(z.enum(['unstyled', 'bold', 'italic', 'code', 'link', 'subscript', 'superscript'])).optional()
+    .describe("Specifies allowed table formatting options. Use an empty array to allow all options."),
+  allowed_table_text_blocks: z.array(z.enum(['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'ordered-list', 'unordered-list'])).optional()
+    .describe("Specifies allowed table text blocks. Use an empty array to allow all options."),
   allowed_content_types: z.array(
     referenceObjectSchema
       .describe("An object with an id or codename property referencing a content type.")
-  ).optional(),
+  ).optional().describe("Specifies allowed content types. Use an empty array to allow all content types."),
   allowed_item_link_types: z.array(
     referenceObjectSchema
       .describe("An object with an id or codename property referencing a content type.")
-  ).optional(),
+  ).optional().describe("Specifies allowed item link types. Use an empty array to allow all link types."),
   ...imageLimitSchema,
   allowed_image_types: z.enum(['adjustable', 'any']).optional(),
   maximum_image_size: z.number().optional(),
@@ -184,8 +190,8 @@ const taxonomyElementSchema = z.object({
     .describe("An object with an id or codename property referencing a taxonomy group."),
   ...namedElementSchema,
   term_count_limit: countLimitSchema,
-  default: arrayDefaultSchema(),
-});
+  default: arrayDefaultSchema,
+}).describe("Element that allows selection of taxonomy terms from the specified taxonomy_group.");
 
 const textElementSchema = z.object({
   type: z.literal('text'),
@@ -204,7 +210,7 @@ const urlSlugElementSchema = z.object({
     snippet: referenceObjectSchema
       .describe("An object with an id or codename property referencing a content type snippet.")
       .optional(),
-  }),
+  }).describe("The element the URL slug depends on. If this element is within a snippet, the snippet must also be specified."),
   validation_regex: regexValidationSchema,
 });
 
