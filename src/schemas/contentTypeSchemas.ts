@@ -22,7 +22,7 @@ const contentGroupElementSchema = {
 const namedElementSchema = {
   ...baseElementSchema,
   name: z.string(),
-  guidelines: z.string().optional().describe("Guidelines for the element. This is rich text and can include HTML formatting. No need to wrap in <p> tags."),
+  guidelines: z.string().optional(),
   is_required: z.boolean().optional(),
   is_non_localizable: z.boolean().optional(),
 };
@@ -87,7 +87,8 @@ const assetElementSchema = {
   maximum_file_size: z.number().optional(),
   allowed_file_types: z.enum(['adjustable', 'any']).optional(),
   ...imageLimitSchema,
-  default: arrayDefaultSchema,
+  default: arrayDefaultSchema
+    .describe("Default value of the asset element. Reference an existing asset by its id or codename."),
 };
 
 const customElementSchema = {
@@ -109,8 +110,10 @@ const dateTimeElementSchema = {
 
 const guidelinesElementSchema = {
   type: z.literal('guidelines'),
-  guidelines: z.string(),
   ...baseElementSchema,
+  guidelines: z
+    .string()
+    .describe("Value of the guidelines element. This is rich text and can include HTML formatting. Check the documentation here https://kontent.ai/learn/docs/apis/openapi/management-api-v2/#section/HTML5-elements-allowed-in-rich-text for the supported format, but keep in mind that content items and components are not supported in guidelines. Use empty `<p>` tag for empty guidelines."),
 };
 
 const modularContentElementSchema = {
@@ -121,7 +124,8 @@ const modularContentElementSchema = {
       .describe("An object with an id or codename property referencing a content type. Use an empty array to allow all content types.")
   ).optional(),
   item_count_limit: countLimitSchema,
-  default: arrayDefaultSchema,
+  default: arrayDefaultSchema
+    .describe("Default value of the modular content element. Reference an existing content item by its id or codename."),
 };
 
 const subpagesElementSchema = {
@@ -143,7 +147,8 @@ const multipleChoiceElementSchema = {
     codename: z.string().optional(),
     external_id: z.string().optional(),
   })),
-  default: arrayDefaultSchema,
+  default: arrayDefaultSchema
+    .describe("Default value of the multiple choice element. Reference one of the options by its codename."),
 };
 
 const numberElementSchema = {
@@ -194,7 +199,8 @@ const taxonomyElementSchema = {
     .describe("An object with an id or codename property referencing a taxonomy group."),
   ...namedElementSchema,
   term_count_limit: countLimitSchema,
-  default: arrayDefaultSchema,
+  default: arrayDefaultSchema
+    .describe("Default value of the taxonomy element. Reference one of the terms from the specified taxonomy group by its codename."),
 };
 
 const textElementSchema = {
