@@ -19,24 +19,23 @@ Kontent.ai MCP Server implements the Model Context Protocol to connect your Kont
 
 ## Table of Contents
 
-* 🔌 Quickstart
-  * Prerequisites
-  * Setup Options
-* 🛠️ Available Tools
-* ⚙️ Configuration
-  * 🔑 API Keys and Permissions
-* 🚀 Transport Options
-  * 📟 STDIO Transport
-  * 🌐 SSE Transport
-* 💻 Development
-  * 🛠 Local Installation
-  * 📜 Available Scripts
-  * 📂 Project Structure
-  * 🔍 Debugging
+* [🔌 Quickstart](#-quickstart)
+  * [🔑 Prerequisites](#-prerequisites)
+  * [🛠 Setup Options](#-setup-options)
+* [🛠️ Available Tools](#️-available-tools)
+* [⚙️ Configuration](#️-configuration)
+* [🚀 Transport Options](#-transport-options)
+  * [📟 STDIO Transport](#-stdio-transport)
+  * [🌐 SSE Transport](#-sse-transport)
+* [💻 Development](#-development)
+  * [🛠 Local Installation](#-local-installation)
+  * [📂 Project Structure](#-project-structure)
+  * [🔍 Debugging](#-debugging)
+* [License](#license)
 
 ## 🔌 Quickstart
 
-### Prerequisites
+### 🔑 Prerequisites
 
 Before you can use the MCP server, you need:
 
@@ -52,7 +51,7 @@ Before you can use the MCP server, you need:
    * Find your environment ID in project settings
    * This identifies which environment the server will work with
 
-### Setup Options
+### 🛠 Setup Options
 
 You can run the Kontent.ai MCP Server with npx:
 
