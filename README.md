@@ -39,17 +39,10 @@ Kontent.ai MCP Server implements the Model Context Protocol to connect your Kont
 
 Before you can use the MCP server, you need:
 
-1. **A Kontent.ai account**
-   * Sign up at [kontent.ai](https://kontent.ai) if you don't have an account
-   * Create a project to work with
-
-2. **Management API key**
-   * Go to your project settings → API keys
-   * Create a Management API key with appropriate permissions
-
-3. **Environment ID**
-   * Find your environment ID in project settings
-   * This identifies which environment the server will work with
+1. **A Kontent.ai account** - [Sign up](https://kontent.ai/signup) if you don't have an account.
+1. **A project** - [Create a project](https://kontent.ai/learn/docs/projects#a-create-projects) to work with.
+1. **Management API key** - [Create a Management API key](https://kontent.ai/learn/docs/apis/api-keys#a-create-management-api-keys) with appropriate permissions.
+1. **Environment ID** - [Get your environment ID](https://kontent.ai/learn/docs/environments#a-get-your-environment-id).
 
 ### 🛠 Setup Options
 
