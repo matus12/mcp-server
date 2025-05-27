@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "kontent-ai-npx": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@kontent-ai/mcp-server@latest",
+        "stdio"
+      ],
+      "env": {
+        "KONTENT_API_KEY": "<your-management-api-key>",
+        "KONTENT_ENVIRONMENT_ID": "<your-environment-id>"
+      }
+    },
+    "kontent-ai-stdio": {
+      "command": "node ./build/bin.js stdio",
+      "env": {
+        "KONTENT_API_KEY": "<your-management-api-key>",
+        "KONTENT_ENVIRONMENT_ID": "<your-environment-id>"
+      }
+    },
+    "kontent-ai-sse": {
+      "url": "http://localhost:3001/sse"
+    }
+  }
+} 
