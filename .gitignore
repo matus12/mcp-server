@@ -13,6 +13,7 @@ build/
 .env
 .env.local
 .env.*.local
+.cursor/mcp.json
 
 # IDE and editor files
 .idea/
