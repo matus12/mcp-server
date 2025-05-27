@@ -8,34 +8,111 @@
 [![MIT License][license-shield]][license-url]
 [![Discord][discord-shield]][discord-url]
 
-This server provides a Model Context Protocol (MCP) interface for interacting with Kontent.ai's Management and Delivery APIs. It enables AI assistants to access and manipulate Kontent.ai content using standardized tools.
+> Transform your content operations with AI-powered tools for Kontent.ai. Create, manage, and explore your structured content through natural language conversations in your favorite AI-enabled editor.
 
-## Features
+Kontent.ai MCP Server implements the Model Context Protocol to connect your Kontent.ai projects with AI tools like Claude, Cursor, and VS Code. It enables AI models to understand your content structure and perform operations through natural language instructions.
 
-- Retrieve content items, variants, and assets
-- List available languages and assets
-- Get, List, and Create content types and snippets
-- Get, List, and Create taxonomies
+## ✨ Key Features
 
-## Getting Started
+* 🚀 **Rapid prototyping**: Transform your diagrams into live content models in seconds
+* 📈 **Data Visualisation**: Visualise your content model in any format you want
+
+## Table of Contents
+
+* 🔌 Quickstart
+  * Prerequisites
+  * Setup Options
+* 🛠️ Available Tools
+* ⚙️ Configuration
+  * 🔑 API Keys and Permissions
+* 🚀 Transport Options
+  * 📟 STDIO Transport
+  * 🌐 SSE Transport
+* 💻 Development
+  * 🛠 Local Installation
+  * 📜 Available Scripts
+  * 📂 Project Structure
+  * 🔍 Debugging
+
+## 🔌 Quickstart
 
 ### Prerequisites
 
-- Node.js (version specified in `.nvmrc`)
-- Kontent.ai account with API keys
+Before you can use the MCP server, you need:
 
-### Running
+1. **A Kontent.ai account**
+   * Sign up at [kontent.ai](https://kontent.ai) if you don't have an account
+   * Create a project to work with
 
-You can run this server with either stdio or sse transport.
+2. **Management API key**
+   * Go to your project settings → API keys
+   * Create a Management API key with appropriate permissions
 
-### Stdio transport
+3. **Environment ID**
+   * Find your environment ID in project settings
+   * This identifies which environment the server will work with
 
-To run the server with stdio transport configure your MCP client with the command to run and the necessary environment variables.
-Example:
+### Setup Options
+
+You can run the Kontent.ai MCP Server with npx:
+
+#### STDIO Transport
+
+```bash
+npx @kontent-ai/mcp-server@latest stdio
+```
+
+#### SSE Transport
+
+```bash
+npx @kontent-ai/mcp-server@latest sse
+```
+
+## 🛠️ Available Tools
+
+### Content Type Management
+
+* **get-type-mapi** – Get a specific content type by codename
+* **list-content-types-mapi** – List all content types in the environment
+* **add-content-type-mapi** – Create a new content type with elements
+
+### Content Type Snippet Management
+
+* **get-type-snippet-mapi** – Get a specific content type snippet by codename
+* **list-content-type-snippets-mapi** – List all content type snippets
+* **add-content-type-snippet-mapi** – Create a new content type snippet
+
+### Taxonomy Management
+
+* **get-taxonomy-group-mapi** – Get a specific taxonomy group by codename
+* **list-taxonomy-groups-mapi** – List all taxonomy groups
+* **add-taxonomy-group-mapi** – Create a new taxonomy group with terms
+
+### Language Management
+
+* **list-languages-mapi** – List all languages configured in the environment
+
+## ⚙️ Configuration
+
+The server requires the following environment variables:
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| KONTENT_API_KEY | Your Kontent.ai Management API key | ✅ |
+| KONTENT_ENVIRONMENT_ID | Your environment ID | ✅ |
+| PORT | Port for SSE transport (defaults to 3001) | ❌ |
+
+## 🚀 Transport Options
+
+### 📟 STDIO Transport
+
+To run the server with STDIO transport, configure your MCP client with:
+
 ```json
 {
   "kontent-ai-stdio": {
-      "command": "npx @kontent-ai/mcp-server@latest stdio",
+      "command": "npx",
+      "args": ["@kontent-ai/mcp-server@latest", "stdio"],
       "env": {
         "KONTENT_API_KEY": "<management-api-key>",
         "KONTENT_ENVIRONMENT_ID": "<environment-id>"
@@ -44,22 +121,22 @@ Example:
 }
 ```
 
-### SSE transport
+### 🌐 SSE Transport
 
-You can also run your server manually with the SSE transport and configure your MCP client to connect to the port the server is running on.
-Run the following command to start the server and ensure the environment variables are defined for it either by providing `.env` file in the `cwd` or providing the variables to the process any other way.
+For SSE transport, first start the server:
 
 ```bash
 npx @kontent-ai/mcp-server@latest sse
 ```
+
+With environment variables in a `.env` file, or otherwise accessible to the process:
 ```env
 KONTENT_API_KEY=<management-api-key>
 KONTENT_ENVIRONMENT_ID=<environment-id>
-PORT=<port-number> # optionally specify port, defaults to 3001
+PORT=3001  # optional, defaults to 3001
 ```
 
-Then configure your MCP client to connect to the running server.
-Example:
+Then configure your MCP client:
 ```json
 {
   "kontent-ai-sse": {
@@ -68,10 +145,9 @@ Example:
 }
 ```
 
+## 💻 Development
 
-## Development
-
-### Local Installation
+### 🛠 Local Installation
 
 ```bash
 # Clone the repository
@@ -89,13 +165,7 @@ npm run start:sse  # For SSE transport
 npm run start:stdio  # For STDIO transport
 ```
 
-### Available Scripts
-
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm run start:sse` - Start the server with Server-Sent Events transport
-- `npm run start:stdio` - Start the server with Standard IO transport
-
-### Project Structure
+### 📂 Project Structure
 
 - `src/` - Source code
   - `tools/` - MCP tool implementations
@@ -103,6 +173,22 @@ npm run start:stdio  # For STDIO transport
   - `schemas/` - Data validation schemas
   - `server.ts` - Main server setup and tool registration
   - `bin.ts` - Single entry point that handles both transport types
+
+### 🔍 Debugging
+
+For debugging, you can use the MCP inspector:
+
+```bash
+npx @modelcontextprotocol/inspector -e KONTENT_API_KEY=<key> -e KONTENT_ENVIRONMENT_ID=<env-id> node path/to/build/bin.js
+```
+
+Or use the MCP inspector on a running sse server:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+This provides a web interface for inspecting and testing the available tools.
 
 ## License
 
