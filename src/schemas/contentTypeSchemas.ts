@@ -10,6 +10,10 @@ const referenceObjectSchema = z.object({
 const baseElementSchema = {
   codename: z.string().optional(),
   external_id: z.string().optional(),
+};
+
+// Content group schema for content type elements only
+const contentGroupElementSchema = {
   content_group: referenceObjectSchema
     .describe("An object with an id or codename property referencing a content group.")
     .optional(),
@@ -76,7 +80,7 @@ const textLengthLimitSchema = z.object({
 }).optional();
 
 // Individual element type schemas
-const assetElementSchema = z.object({
+const assetElementSchema = {
   type: z.literal('asset'),
   ...namedElementSchema,
   asset_count_limit: countLimitSchema,
@@ -84,9 +88,9 @@ const assetElementSchema = z.object({
   allowed_file_types: z.enum(['adjustable', 'any']).optional(),
   ...imageLimitSchema,
   default: arrayDefaultSchema,
-});
+};
 
-const customElementSchema = z.object({
+const customElementSchema = {
   type: z.literal('custom'),
   ...namedElementSchema,
   source_url: z.string(),
@@ -95,21 +99,21 @@ const customElementSchema = z.object({
     referenceObjectSchema
       .describe("An object with an id or codename property referencing an element.")
   ).optional().describe("Specifies which elements from the content type can be used within this custom element."),
-});
+};
 
-const dateTimeElementSchema = z.object({
+const dateTimeElementSchema = {
   type: z.literal('date_time'),
   ...namedElementSchema,
   default: stringDefaultSchema,
-});
+};
 
-const guidelinesElementSchema = z.object({
+const guidelinesElementSchema = {
   type: z.literal('guidelines'),
   guidelines: z.string(),
   ...baseElementSchema,
-});
+};
 
-const modularContentElementSchema = z.object({
+const modularContentElementSchema = {
   type: z.literal('modular_content'),
   ...namedElementSchema,
   allowed_content_types: z.array(
@@ -118,9 +122,9 @@ const modularContentElementSchema = z.object({
   ).optional(),
   item_count_limit: countLimitSchema,
   default: arrayDefaultSchema,
-});
+};
 
-const subpagesElementSchema = z.object({
+const subpagesElementSchema = {
   type: z.literal('subpages'),
   ...namedElementSchema,
   allowed_content_types: z.array(
@@ -128,9 +132,9 @@ const subpagesElementSchema = z.object({
       .describe("An object with an id or codename property referencing a content type. Use an empty array to allow all content types.")
   ).optional(),
   item_count_limit: countLimitSchema,
-});
+};
 
-const multipleChoiceElementSchema = z.object({
+const multipleChoiceElementSchema = {
   type: z.literal('multiple_choice'),
   ...namedElementSchema,
   mode: z.enum(['single', 'multiple']),
@@ -140,15 +144,15 @@ const multipleChoiceElementSchema = z.object({
     external_id: z.string().optional(),
   })),
   default: arrayDefaultSchema,
-});
+};
 
-const numberElementSchema = z.object({
+const numberElementSchema = {
   type: z.literal('number'),
   ...namedElementSchema,
   default: numberDefaultSchema,
-});
+};
 
-const richTextElementSchema = z.object({
+const richTextElementSchema = {
   type: z.literal('rich_text'),
   ...namedElementSchema,
   allowed_blocks: z.array(z.enum(['images', 'text', 'tables', 'components-and-items'])).optional()
@@ -175,33 +179,33 @@ const richTextElementSchema = z.object({
   allowed_image_types: z.enum(['adjustable', 'any']).optional(),
   maximum_image_size: z.number().optional(),
   maximum_text_length: textLengthLimitSchema,
-});
+};
 
-const snippetElement = z.object({
+const snippetElement = {
   type: z.literal('snippet'),
   snippet: referenceObjectSchema
     .describe("An object with an id or codename property referencing a snippet."),
   ...baseElementSchema,
-});
+};
 
-const taxonomyElementSchema = z.object({
+const taxonomyElementSchema = {
   type: z.literal('taxonomy'),
   taxonomy_group: referenceObjectSchema
     .describe("An object with an id or codename property referencing a taxonomy group."),
   ...namedElementSchema,
   term_count_limit: countLimitSchema,
   default: arrayDefaultSchema,
-}).describe("Element that allows selection of taxonomy terms from the specified taxonomy_group.");
+};
 
-const textElementSchema = z.object({
+const textElementSchema = {
   type: z.literal('text'),
   ...namedElementSchema,
   maximum_text_length: textLengthLimitSchema,
   validation_regex: regexValidationSchema,
   default: stringDefaultSchema,
-});
+};
 
-const urlSlugElementSchema = z.object({
+const urlSlugElementSchema = {
   type: z.literal('url_slug'),
   ...namedElementSchema,
   depends_on: z.object({
@@ -212,23 +216,62 @@ const urlSlugElementSchema = z.object({
       .optional(),
   }).describe("The element the URL slug depends on. If this element is within a snippet, the snippet must also be specified."),
   validation_regex: regexValidationSchema,
-});
+};
 
 // Define a union type of all possible element types for content types
 export const elementSchema = z.discriminatedUnion('type', [
-  assetElementSchema,
-  customElementSchema,
-  dateTimeElementSchema,
-  guidelinesElementSchema,
-  modularContentElementSchema,
-  subpagesElementSchema,
-  multipleChoiceElementSchema,
-  numberElementSchema,
-  richTextElementSchema,
-  snippetElement,
-  taxonomyElementSchema,
-  textElementSchema,
-  urlSlugElementSchema,
+  z.object({
+    ...assetElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...customElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...dateTimeElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...guidelinesElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...modularContentElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...subpagesElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...multipleChoiceElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...numberElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...richTextElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...snippetElement,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...taxonomyElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...textElementSchema,
+    ...contentGroupElementSchema,
+  }),
+  z.object({
+    ...urlSlugElementSchema,
+    ...contentGroupElementSchema,
+  }),
 ]);
 
 // Define schema for content groups
@@ -240,15 +283,15 @@ export const contentGroupSchema = z.object({
 
 // Define a union type for snippet elements (excluding url_slug and snippet elements)
 export const snippetElementSchema = z.discriminatedUnion('type', [
-  assetElementSchema,
-  customElementSchema,
-  dateTimeElementSchema,
-  guidelinesElementSchema,
-  modularContentElementSchema,
-  subpagesElementSchema,
-  multipleChoiceElementSchema,
-  numberElementSchema,
-  richTextElementSchema,
-  taxonomyElementSchema,
-  textElementSchema,
+  z.object(assetElementSchema),
+  z.object(customElementSchema),
+  z.object(dateTimeElementSchema),
+  z.object(guidelinesElementSchema),
+  z.object(modularContentElementSchema),
+  z.object(subpagesElementSchema),
+  z.object(multipleChoiceElementSchema),
+  z.object(numberElementSchema),
+  z.object(richTextElementSchema),
+  z.object(taxonomyElementSchema),
+  z.object(textElementSchema),
 ]); 
