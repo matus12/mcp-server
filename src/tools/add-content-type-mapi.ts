@@ -24,11 +24,7 @@ export const registerTool = (server: McpServer): void => {
           codename,
           external_id,
           elements,
-          content_groups: content_groups?.map(group => ({
-            name: group.name,
-            external_id: group.external_id,
-            codename: group.codename
-          })),
+          content_groups,
         }))
         .toPromise();
 
