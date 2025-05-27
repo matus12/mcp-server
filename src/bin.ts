@@ -4,6 +4,9 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import express from "express";
 import { createServer } from "./server.js";
+import packageJson from "../package.json" with { type: "json" };
+
+const version = packageJson.version;
 
 async function startSSE() {
   const app = express();
@@ -22,13 +25,14 @@ async function startSSE() {
   
   const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
-    console.log(`Kontent.ai MCP Server (SSE) running on port ${PORT}`);
+    console.log(`Kontent.ai MCP Server v${version} (SSE) running on port ${PORT}`);
   });
 }
 
 async function startStdio() {
   const { server } = createServer();
   const transport = new StdioServerTransport();
+  console.log(`Kontent.ai MCP Server v${version} (stdio) starting`);
   await server.connect(transport);
 }
 

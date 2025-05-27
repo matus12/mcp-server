@@ -14,11 +14,13 @@ import { registerTool as registerListContentTypeSnippetsMapi } from "./tools/lis
 import { registerTool as registerAddTaxonomyGroupMapi } from "./tools/add-taxonomy-group-mapi.js";
 import { registerTool as registerListTaxonomyGroupsMapi } from "./tools/list-taxonomy-groups-mapi.js";
 import { registerTool as registerGetTaxonomyGroupMapi } from "./tools/get-taxonomy-group-mapi.js";
+import packageJson from "../package.json" with { type: "json" };
+
 // Create server instance
 export const createServer = () => {
   const server = new McpServer({
       name: "kontent-ai",
-      version: "1.0.0",
+      version: packageJson.version,
       capabilities: {
         resources: {},
         tools: {},
