@@ -88,6 +88,7 @@ npx @kontent-ai/mcp-server@latest sse
 * **delete-content-item-mapi** – Delete a content item by internal ID
 * **upsert-language-variant-mapi** – Create or update a language variant with content using internal IDs
 * **delete-language-variant-mapi** – Delete a language variant of a content item by internal IDs
+* **filter-variants-mapi** – Search and filter language variants using filters and search phrases
 
 ### Asset Management
 
