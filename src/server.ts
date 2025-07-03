@@ -7,6 +7,7 @@ import { registerTool as registerAddTaxonomyGroupMapi } from "./tools/add-taxono
 import { registerTool as registerDeleteContentItemMapi } from "./tools/delete-content-item-mapi.js";
 import { registerTool as registerDeleteLanguageVariantMapi } from "./tools/delete-language-variant-mapi.js";
 import { registerTool as registerGetAssetMapi } from "./tools/get-asset-mapi.js";
+import { registerTool as registerGetInitialContext } from "./tools/get-initial-context.js";
 import { registerTool as registerGetItemDapi } from "./tools/get-item-dapi.js";
 import { registerTool as registerGetItemMapi } from "./tools/get-item-mapi.js";
 import { registerTool as registerGetTaxonomyGroupMapi } from "./tools/get-taxonomy-group-mapi.js";
@@ -33,6 +34,7 @@ export const createServer = () => {
   });
 
   // Register all tools
+  registerGetInitialContext(server);
   registerGetItemMapi(server);
   registerGetItemDapi(server);
   registerGetVariantMapi(server);
