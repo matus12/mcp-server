@@ -21,14 +21,6 @@ export const registerTool = (server: McpServer): void => {
       continuation_token,
     }) => {
       try {
-        const workflowSteps = workflow_steps?.map((step) => ({
-          workflow_identifier:
-            !step.workflow_identifier ||
-            Object.keys(step.workflow_identifier).length === 0
-              ? { id: "00000000-0000-0000-0000-000000000000" }
-              : step.workflow_identifier,
-          step_identifiers: step.step_identifiers,
-        }));
         const requestPayload = {
           filters: {
             search_phrase,
@@ -36,7 +28,7 @@ export const registerTool = (server: McpServer): void => {
             contributors,
             completion_statuses,
             language,
-            workflow_steps: workflowSteps,
+            workflow_steps,
           },
           order: order_by
             ? {
@@ -92,7 +84,7 @@ export const registerTool = (server: McpServer): void => {
         const responseData = await response.json();
 
         return createMcpToolSuccessResponse(responseData);
-      } catch (error: any) {
+      } catch (error: unknown) {
         return handleMcpToolError(error, "Variant Search");
       }
     },
