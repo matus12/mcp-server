@@ -106,10 +106,6 @@ npx @kontent-ai/mcp-server@latest sse
 * **publish-variant-mapi** – Publish or schedule a language variant of a content item in Kontent.ai. This operation can either immediately publish the variant or schedule it for publication at a specific future date and time with optional timezone specification
 * **unpublish-variant-mapi** – Unpublish or schedule unpublishing of a language variant of a content item in Kontent.ai. This operation can either immediately unpublish the variant (making it unavailable through the Delivery API) or schedule it for unpublishing at a specific future date and time with optional timezone specification
 
-### Utility
-
-* **get-current-datetime** – Get the current date and time in UTC (ISO-8601 format)
-
 ## ⚙️ Configuration
 
 The server requires the following environment variables:
