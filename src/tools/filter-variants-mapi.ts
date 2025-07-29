@@ -13,9 +13,11 @@ export const registerTool = (server: McpServer): void => {
       search_phrase,
       content_types,
       contributors,
+      has_no_contributors,
       completion_statuses,
       language,
       workflow_steps,
+      taxonomy_groups,
       order_by,
       order_direction,
       continuation_token,
@@ -26,9 +28,11 @@ export const registerTool = (server: McpServer): void => {
             search_phrase,
             content_types,
             contributors,
+            has_no_contributors,
             completion_statuses,
             language,
             workflow_steps,
+            taxonomy_groups,
           },
           order: order_by
             ? {
