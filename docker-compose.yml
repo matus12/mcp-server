@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    image: matusb2.azurecr.io/kontent-mcp-server:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - KONTENT_API_KEY=${KONTENT_API_KEY}
+      - KONTENT_ENVIRONMENT_ID=${KONTENT_ENVIRONMENT_ID}
+      - PORT=3001
+      - TRANSPORT=stdio  # Can be stdio, sse, or shttp
+      - NODE_ENV=production
+    restart: unless-stopped

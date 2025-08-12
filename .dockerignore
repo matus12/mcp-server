@@ -1,0 +1,36 @@
+# Exclude files and folders not needed for building the Docker image
+# Keeps the build context small and images slim
+
+# VCS
+.git
+.github
+.gitignore
+
+# Dependencies and build outputs
+node_modules
+build
+dist
+coverage
+
+# IDE/editor
+.vscode
+.idea
+
+# Logs and temp files
+*.log
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store
+.tmp
+tmp
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Env files (provide via docker run -e or orchestrator)
+.env
+.env.*
+!.env.example
