@@ -25,15 +25,15 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: matusb.azurecr.io/
-          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_C5DA6EEF9DB9473B90A60DA7627AB289 }}
-          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_87D9E1C55DE243E1B46E4D7FA9A64BDF }}
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_2FCFB8061D3B40EFA62D79BBFC7DFBA1 }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_4CFC8DDD81B945BC9762E6DECBEC362A }}
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: matusb.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_C5DA6EEF9DB9473B90A60DA7627AB289 }}/matusb/kontent-ai-mcp:${{ github.sha }}
+          tags: matusb.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_2FCFB8061D3B40EFA62D79BBFC7DFBA1 }}/kontent-ai-mcp:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'matus-kontent-mcp'
           slot-name: 'Production'
-          images: 'matusb.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_C5DA6EEF9DB9473B90A60DA7627AB289 }}/matusb/kontent-ai-mcp:${{ github.sha }}'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F723539D9CAE4B728ED898426954B2AF }}
+          images: 'matusb.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_2FCFB8061D3B40EFA62D79BBFC7DFBA1 }}/kontent-ai-mcp:${{ github.sha }}'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_14E72AA31B0E4D5CB723055A8928B9A1 }}
