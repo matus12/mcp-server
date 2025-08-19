@@ -48,10 +48,10 @@ You can run the Kontent.ai MCP Server with npx:
 npx @kontent-ai/mcp-server@latest stdio
 ```
 
-#### SSE Transport
+#### Streamable HTTP Transport
 
 ```bash
-npx @kontent-ai/mcp-server@latest sse
+npx @kontent-ai/mcp-server@latest shttp
 ```
 
 ## 🛠️ Available Tools
@@ -111,13 +111,25 @@ npx @kontent-ai/mcp-server@latest sse
 
 ## ⚙️ Configuration
 
-The server requires the following environment variables:
+The server supports two configuration modes:
+
+### Single-Tenant Mode (Default)
+
+For single-tenant mode, configure environment variables:
 
 | Variable | Description | Required |
 |----------|-------------|----------|
 | KONTENT_API_KEY | Your Kontent.ai Management API key | ✅ |
 | KONTENT_ENVIRONMENT_ID | Your environment ID | ✅ |
-| PORT | Port for SSE transport (defaults to 3001) | ❌ |
+| PORT | Port for HTTP transport (defaults to 3001) | ❌ |
+
+### Multi-Tenant Mode
+
+For multi-tenant mode (Streamable HTTP only), the server accepts:
+- **Environment ID** as a URL path parameter: `/{environmentId}/mcp`
+- **API Key** via Bearer token in the Authorization header: `Authorization: Bearer <api-key>`
+
+This mode allows a single server instance to handle requests for multiple Kontent.ai environments securely without requiring environment variables.
 
 ## 🚀 Transport Options
 
@@ -138,30 +150,6 @@ To run the server with STDIO transport, configure your MCP client with:
 }
 ```
 
-### 🌐 SSE Transport
-
-For SSE transport, first start the server:
-
-```bash
-npx @kontent-ai/mcp-server@latest sse
-```
-
-With environment variables in a `.env` file, or otherwise accessible to the process:
-```env
-KONTENT_API_KEY=<management-api-key>
-KONTENT_ENVIRONMENT_ID=<environment-id>
-PORT=3001  # optional, defaults to 3001
-```
-
-Then configure your MCP client:
-```json
-{
-  "kontent-ai-sse": {
-    "url": "http://localhost:3001/sse"
-  }
-}
-```
-
 ### 🌊 Streamable HTTP Transport
 
 For Streamable HTTP transport, first start the server:
@@ -169,6 +157,8 @@ For Streamable HTTP transport, first start the server:
 ```bash
 npx @kontent-ai/mcp-server@latest shttp
 ```
+
+#### Single-Tenant Mode
 
 With environment variables in a `.env` file, or otherwise accessible to the process:
 ```env
@@ -186,6 +176,106 @@ Then configure your MCP client:
 }
 ```
 
+#### Multi-Tenant Mode
+
+No environment variables required. The server accepts requests for multiple environments using URL path parameters and Bearer authentication.
+
+##### VS Code Configuration
+
+Create a `.vscode/mcp.json` file in your workspace:
+
+```json
+{
+  "servers": {
+    "kontent-ai-multi": {
+      "uri": "http://localhost:3001/<environment-id>/mcp",
+      "headers": {
+        "Authorization": "Bearer <management-api-key>"
+      }
+    }
+  }
+}
+```
+
+For secure configuration with input prompts:
+
+```json
+{
+  "inputs": [
+    {
+      "id": "apiKey",
+      "type": "password",
+      "description": "Kontent.ai API Key"
+    },
+    {
+      "id": "environmentId",
+      "type": "text",
+      "description": "Environment ID"
+    }
+  ],
+  "servers": {
+    "kontent-ai-multi": {
+      "uri": "http://localhost:3001/${inputs.environmentId}/mcp",
+      "headers": {
+        "Authorization": "Bearer ${inputs.apiKey}"
+      }
+    }
+  }
+}
+```
+
+##### Claude Desktop Configuration
+
+Update your Claude Desktop configuration file:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+Use `mcp-remote` as a proxy to add authentication headers:
+
+```json
+{
+  "mcpServers": {
+    "kontent-ai-multi": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:3001/<environment-id>/mcp",
+        "--header",
+        "Authorization: Bearer <management-api-key>"
+      ]
+    }
+  }
+}
+```
+
+##### Claude Code Configuration
+
+For Claude Code (claude.ai/code), add the server configuration:
+
+```bash
+# Add the multi-tenant server
+claude mcp add \
+  --url "http://localhost:3001/<environment-id>/mcp" \
+  --header "Authorization: Bearer <management-api-key>" \
+  kontent-ai-multi
+```
+
+Or configure directly in the settings:
+
+```json
+{
+  "kontent-ai-multi": {
+    "url": "http://localhost:3001/<environment-id>/mcp",
+    "headers": {
+      "Authorization": "Bearer <management-api-key>"
+    }
+  }
+}
+```
+
+**Important**: Replace `<environment-id>` with your actual Kontent.ai environment ID (GUID format) and `<management-api-key>` with your Management API key.
+
 ## 💻 Development
 
 ### 🛠 Local Installation
@@ -202,12 +292,10 @@ npm ci
 npm run build
 
 # Start the server
-npm run start:sse  # For SSE transport
 npm run start:stdio  # For STDIO transport
 npm run start:shttp  # For Streamable HTTP transport
 
 # Start the server with automatic reloading (no need to build first)
-npm run dev:sse  # For SSE transport
 npm run dev:stdio  # For STDIO transport
 npm run dev:shttp  # For Streamable HTTP transport
 ```
@@ -232,7 +320,7 @@ For debugging, you can use the MCP inspector:
 npx @modelcontextprotocol/inspector -e KONTENT_API_KEY=<key> -e KONTENT_ENVIRONMENT_ID=<env-id> node path/to/build/bin.js
 ```
 
-Or use the MCP inspector on a running sse server:
+Or use the MCP inspector on a running streamable HTTP server:
 
 ```bash
 npx @modelcontextprotocol/inspector
