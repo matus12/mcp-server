@@ -14,12 +14,10 @@ npm run build
 
 # Start development server with auto-reload (no build required)
 npm run dev:stdio   # For STDIO transport
-npm run dev:sse     # For SSE transport  
 npm run dev:shttp   # For Streamable HTTP transport
 
 # Start production server (requires build)
 npm run start:stdio  # For STDIO transport
-npm run start:sse    # For SSE transport
 npm run start:shttp  # For Streamable HTTP transport
 ```
 
@@ -37,7 +35,7 @@ npm run format:fix
 # Debug with MCP inspector
 npx @modelcontextprotocol/inspector -e KONTENT_API_KEY=<key> -e KONTENT_ENVIRONMENT_ID=<env-id> node build/bin.js
 
-# Or inspect a running SSE server
+# Or inspect streamable HTTP server
 npx @modelcontextprotocol/inspector
 ```
 
@@ -47,10 +45,9 @@ This is a Model Context Protocol (MCP) server for Kontent.ai that enables AI mod
 
 ### Core Components
 
-1. **Transport Layer** (`src/bin.ts`): Single entry point supporting three transport protocols:
-   - STDIO: Direct process communication
-   - SSE (Server-Sent Events): HTTP-based real-time communication
-   - Streamable HTTP: Request-response based HTTP communication
+1. **Transport Layer** (`src/bin.ts`): Single entry point supporting two transport protocols:
+   - STDIO: Direct process communication (single-tenant only)
+   - Streamable HTTP: Request-response based HTTP communication (supports multi-tenant)
 
 2. **Server Core** (`src/server.ts`): Central server instance that:
    - Registers all available tools
@@ -98,10 +95,57 @@ When modifying tools (enforced in `.cursor/rules/tools-in-readme.mdc`):
 
 ### Environment Requirements
 
+#### Single-Tenant Mode
 Required environment variables:
 - `KONTENT_API_KEY`: Management API key
 - `KONTENT_ENVIRONMENT_ID`: Environment ID
 - `PORT`: Server port (optional, defaults to 3001)
+
+#### Multi-Tenant Mode (Streamable HTTP only)
+No environment variables required. Instead:
+- Environment ID is provided via URL path: `/{environmentId}/mcp`
+- API key is provided via Bearer token: `Authorization: Bearer <api-key>`
+
+##### Client Configuration Examples
+
+**VS Code**: Create `.vscode/mcp.json` in your workspace:
+```json
+{
+  "servers": {
+    "kontent-ai-multi": {
+      "uri": "http://localhost:3001/{environmentId}/mcp",
+      "headers": {
+        "Authorization": "Bearer {api-key}"
+      }
+    }
+  }
+}
+```
+
+**Claude Desktop**: Use `mcp-remote` as proxy in `claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "kontent-ai-multi": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:3001/{environmentId}/mcp",
+        "--header",
+        "Authorization: Bearer {api-key}"
+      ]
+    }
+  }
+}
+```
+
+**Claude Code**: Configure via CLI or settings:
+```bash
+claude mcp add \
+  --url "http://localhost:3001/{environmentId}/mcp" \
+  --header "Authorization: Bearer {api-key}" \
+  kontent-ai-multi
+```
 
 ### Code Style
 
