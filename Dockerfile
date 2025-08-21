@@ -60,10 +60,10 @@ EXPOSE 3001
 
 # Default environment variables
 ENV PORT=3001 \
-    TRANSPORT=sse
+    TRANSPORT=shttp
 
 # Use dumb-init to handle signals, run Node by default
 ENTRYPOINT ["dumb-init", "--"]
 
 # Default command (can be overridden at runtime)
-CMD ["node", "build/bin.js", "sse"]
+CMD ["node", "build/bin.js", "shttp"]
